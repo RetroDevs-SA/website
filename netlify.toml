@@ -1,0 +1,29 @@
+[build]
+  command = "npm run build"
+  functions = "netlify/functions"
+  publish = ".next/static"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[headers]
+  [[headers.values]]
+    key = "Cache-Control"
+    value = "public, max-age=3600, must-revalidate"
+
+[[headers.values]]
+  key = "X-Content-Type-Options"
+  value = "nosniff"
+
+[[headers.values]]
+  key = "X-Frame-Options"
+  value = "SAMEORIGIN"
+
+[[headers.values]]
+  key = "X-XSS-Protection"
+  value = "1; mode=block"
