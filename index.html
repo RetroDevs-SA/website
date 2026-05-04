@@ -9,7 +9,7 @@
 <meta property="og:description" content="Construímos o digital de quem está pronto pra crescer.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://retrodevs.com.br">
-<link rel="icon" href="/assets/img/favicon.ico">
+<link rel="icon" href="/assets/img/favico.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -129,14 +129,13 @@
     transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
   }
   .page-loader.loaded { opacity: 0; visibility: hidden; }
-  .page-loader svg {
-    width: 60px;
+  .page-loader img {
     height: 60px;
     animation: loader-spin 1.4s var(--ease-in-out-quart) infinite;
   }
   @keyframes loader-spin {
     0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(0.85); }
+    50% { transform: rotate(180deg) scale(1); }
     100% { transform: rotate(360deg) scale(1); }
   }
 
@@ -1529,9 +1528,7 @@
 
 <!-- LOADER -->
 <div class="page-loader" id="loader">
-  <svg viewBox="0 0 100 100" fill="none">
-    <path d="M15 88 L15 18 Q15 15 18 15 L60 15 Q82 15 82 38 Q82 54 66 58 L84 88 L66 88 L50 60 L32 60 L32 88 Z M32 45 L57 45 Q65 45 65 38 Q65 31 57 31 L32 31 Z" fill="#0027FF"/>
-  </svg>
+  <img src="/assets/img/logo-r.png" alt="RetroDevs R blue Logo">
 </div>
 
 <div class="grid-overlay"></div>
