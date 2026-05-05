@@ -298,6 +298,19 @@
     .nav-links { display: none; }
     .menu-toggle { display: flex; flex-direction: column; gap: 4px; }
     .menu-toggle span { width: 22px; height: 2px; background: var(--text-primary); border-radius: 1px; }
+    .nav-links.active {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(250, 250, 247, 0.95);
+      backdrop-filter: blur(24px);
+      padding: 20px;
+      gap: 20px;
+      border-bottom: 1px solid var(--border-soft);
+    }
   }
 
   /* ============================================
@@ -1543,12 +1556,8 @@
 <!-- NAV -->
 <nav id="nav">
   <div class="container">
-    <a href="#" class="logo">
-        <img height="32" width="40" src="/assets/img/logo-r.png" alt="RetroDevs R blue Logo">
-      <div class="logo-text">
-        <span class="name">RETRODEVS<span class="logo-tm">™</span></span>
-        <span class="tagline">DIGITAL & SOFTWARE</span>
-      </div>
+    <a href="/" class="logo">
+      <img height="50" src="/assets/img/header-logo.png" alt="RetroDevs logo branding">
     </a>
     <div class="nav-links">
       <a href="#servicos">Serviços</a>
@@ -2064,12 +2073,8 @@
     <h3 class="footer-headline">Vamos <span class="italic">construir</span><br>algo <span class="blue">juntos</span>?</h3>
     <div class="footer-grid">
       <div class="footer-brand-col">
-        <a href="#" class="logo">
-          <img height="32" width="40" src="/assets/img/logo-r.png" alt="RetroDevs R blue Logo">
-          <div class="logo-text">
-            <span class="name">RETRODEVS<span class="logo-tm">™</span></span>
-            <span class="tagline">DIGITAL & SOFTWARE</span>
-          </div>
+        <a href="/" class="logo">
+          <img height="50" src="/assets/img/header-logo.png" alt="RetroDevs logo branding">
         </a>
         <p>Tecnologia com clareza, estratégia e conhecimento. Construímos o digital de pequenos e médios negócios.</p>
       </div>
@@ -2112,6 +2117,18 @@
   window.addEventListener('scroll', () => {
     if (window.scrollY > 20) nav.classList.add('scrolled');
     else nav.classList.remove('scrolled');
+  });
+
+  // Menu toggle
+  document.querySelector('.menu-toggle').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('active');
+  });
+
+  // Close menu on link click
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelector('.nav-links').classList.remove('active');
+    });
   });
 
   // FAQ accordion
