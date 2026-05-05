@@ -2192,39 +2192,42 @@
 
   contactMethodSelect.addEventListener('change', updateContactField);
   contactField.addEventListener('input', phoneMaskHandler);
-  document.getElementById('leadForm').addEventListener('submit', submitForm);
 
-  function submitForm(e) {
-    e.preventDefault();
-    const form = e.target;
-    const data = new FormData(form);
-    const nome = data.get('nome');
-    const preferredContact = data.get('preferredContact');
-    const contact = data.get('contact');
-    const negocio = data.get('negocio');
-    const descricao = data.get('descricao') || 'Não informado';
+  // Don't use because we are using netlify forms, 
+  // but leaving here in case we want to switch to 
+  // custom handling in the future
 
-    const msgBody = `Olá RetroDevs! Quero meu diagnóstico gratuito.\n\n` +
-      `Nome: ${nome}\n` +
-      `${preferredContact === 'email' ? 'E-mail' : 'WhatsApp'}: ${contact}\n` +
-      `Negócio: ${negocio}\n` +
-      `Descrição: ${descricao}`;
+  // function submitForm(e) {
+  //   e.preventDefault();
+  //   const form = e.target;
+  //   const data = new FormData(form);
+  //   const nome = data.get('nome');
+  //   const preferredContact = data.get('preferredContact');
+  //   const contact = data.get('contact');
+  //   const negocio = data.get('negocio');
+  //   const descricao = data.get('descricao') || 'Não informado';
 
-    document.getElementById('formSuccess').classList.add('show');
+  //   const msgBody = `Olá RetroDevs! Quero meu diagnóstico gratuito.\n\n` +
+  //     `Nome: ${nome}\n` +
+  //     `${preferredContact === 'email' ? 'E-mail' : 'WhatsApp'}: ${contact}\n` +
+  //     `Negócio: ${negocio}\n` +
+  //     `Descrição: ${descricao}`;
 
-    setTimeout(() => {
-      if (preferredContact === 'email') {
-        const subject = encodeURIComponent('Pedido de diagnóstico gratuito');
-        const body = encodeURIComponent(msgBody);
-        window.open(`mailto:agenciaretrodevs@gmail.com?subject=${subject}&body=${body}`, '_blank');
-      } else {
-        const msg = encodeURIComponent(msgBody);
-        window.open(`https://wa.me/5511966116366?text=${msg}`, '_blank');
-      }
-    }, 800);
+  //   document.getElementById('formSuccess').classList.add('show');
 
-    return false;
-  }
+  //   setTimeout(() => {
+  //     if (preferredContact === 'email') {
+  //       const subject = encodeURIComponent('Pedido de diagnóstico gratuito');
+  //       const body = encodeURIComponent(msgBody);
+  //       window.open(`mailto:agenciaretrodevs@gmail.com?subject=${subject}&body=${body}`, '_blank');
+  //     } else {
+  //       const msg = encodeURIComponent(msgBody);
+  //       window.open(`https://wa.me/5511966116366?text=${msg}`, '_blank');
+  //     }
+  //   }, 800);
+
+  //   return false;
+  // }
 </script>
 </body>
 </html>
