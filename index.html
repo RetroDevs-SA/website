@@ -2015,6 +2015,7 @@
         <p class="subtitle">Preencha em 30 segundos. A gente responde pelo canal que você escolher.</p>
 
         <form name="leadContact" id="leadForm" netlify>
+          <input type="hidden" name="form-name" value="leadContact">
           <div class="form-group">
             <label>Seu nome</label>
             <input type="text" name="nome" required placeholder="Como devemos te chamar?">
@@ -2193,41 +2194,29 @@
   contactMethodSelect.addEventListener('change', updateContactField);
   contactField.addEventListener('input', phoneMaskHandler);
 
-  // Don't use because we are using netlify forms, 
-  // but leaving here in case we want to switch to 
-  // custom handling in the future
+  const leadForm = document.getElementById('leadForm');
+  leadForm.addEventListener('submit', handleSubmit);
 
-  // function submitForm(e) {
-  //   e.preventDefault();
-  //   const form = e.target;
-  //   const data = new FormData(form);
-  //   const nome = data.get('nome');
-  //   const preferredContact = data.get('preferredContact');
-  //   const contact = data.get('contact');
-  //   const negocio = data.get('negocio');
-  //   const descricao = data.get('descricao') || 'Não informado';
+  function handleSubmit(event) {
+    event.preventDefault();
 
-  //   const msgBody = `Olá RetroDevs! Quero meu diagnóstico gratuito.\n\n` +
-  //     `Nome: ${nome}\n` +
-  //     `${preferredContact === 'email' ? 'E-mail' : 'WhatsApp'}: ${contact}\n` +
-  //     `Negócio: ${negocio}\n` +
-  //     `Descrição: ${descricao}`;
+    const myForm = event.target;
+    const formData = new FormData(myForm);
 
-  //   document.getElementById('formSuccess').classList.add('show');
-
-  //   setTimeout(() => {
-  //     if (preferredContact === 'email') {
-  //       const subject = encodeURIComponent('Pedido de diagnóstico gratuito');
-  //       const body = encodeURIComponent(msgBody);
-  //       window.open(`mailto:agenciaretrodevs@gmail.com?subject=${subject}&body=${body}`, '_blank');
-  //     } else {
-  //       const msg = encodeURIComponent(msgBody);
-  //       window.open(`https://wa.me/5511966116366?text=${msg}`, '_blank');
-  //     }
-  //   }, 800);
-
-  //   return false;
-  // }
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    })
+      .then(() => {
+        document.getElementById('formSuccess').classList.add('show');
+        leadForm.reset();
+        updateContactField();
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
 </script>
 </body>
 </html>
