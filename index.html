@@ -2012,16 +2012,23 @@
 
       <div class="form-card">
         <h3>Agende seu diagnóstico</h3>
-        <p class="subtitle">Preencha em 30 segundos. Te chamamos no WhatsApp.</p>
+        <p class="subtitle">Preencha em 30 segundos. A gente responde pelo canal que você escolher.</p>
 
-        <form id="leadForm" onsubmit="return submitForm(event)">
+        <form name="leadContact" id="leadForm" netlify>
           <div class="form-group">
             <label>Seu nome</label>
             <input type="text" name="nome" required placeholder="Como devemos te chamar?">
           </div>
           <div class="form-group">
-            <label>WhatsApp</label>
-            <input type="tel" name="whatsapp" required placeholder="(00) 00000-0000">
+            <label>Como prefere contato?</label>
+            <select name="preferredContact" id="preferredContact" required>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="email">E-mail</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="contactLabel">WhatsApp</label>
+            <input type="tel" name="contact" id="contactField" required placeholder="(00) 00000-0000">
           </div>
           <div class="form-group">
             <label>Tipo do seu negócio</label>
@@ -2046,7 +2053,7 @@
 
           <div class="form-success" id="formSuccess">
             <h4>✓ Recebemos!</h4>
-            <p>Em até 1 hora você recebe nossa mensagem no WhatsApp.</p>
+            <p>Em breve você recebe nossa mensagem no canal escolhido.</p>
           </div>
         </form>
 
@@ -2151,42 +2158,73 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Form handler — sends to WhatsApp
-  function submitForm(e) {
-    e.preventDefault();
-    const form = e.target;
-    const data = new FormData(form);
-    const nome = data.get('nome');
-    const whatsapp = data.get('whatsapp');
-    const negocio = data.get('negocio');
-    const descricao = data.get('descricao') || 'Não informado';
+  // Form handler — sends to WhatsApp or email
+  const contactMethodSelect = document.getElementById('preferredContact');
+  const contactField = document.getElementById('contactField');
+  const contactLabel = document.getElementById('contactLabel');
 
-    const msg = encodeURIComponent(
-      `Olá RetroDevs! Quero meu diagnóstico gratuito.\n\n` +
-      `Nome: ${nome}\n` +
-      `WhatsApp: ${whatsapp}\n` +
-      `Negócio: ${negocio}\n` +
-      `Descrição: ${descricao}`
-    );
-
-    document.getElementById('formSuccess').classList.add('show');
-
-    setTimeout(() => {
-      window.open(`https://wa.me/5511966116366?text=${msg}`, '_blank');
-    }, 800);
-
-    return false;
-  }
-
-  // Phone mask
-  document.querySelector('input[name="whatsapp"]').addEventListener('input', function(e) {
+  const phoneMaskHandler = function(e) {
     let v = e.target.value.replace(/\D/g, '');
     if (v.length > 11) v = v.slice(0, 11);
     if (v.length > 6) v = v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
     else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
     else if (v.length > 0) v = v.replace(/^(\d{0,2}).*/, '($1');
     e.target.value = v;
-  });
+  };
+
+  function updateContactField() {
+    const method = contactMethodSelect.value;
+    contactField.removeEventListener('input', phoneMaskHandler);
+
+    if (method === 'email') {
+      contactLabel.textContent = 'E-mail';
+      contactField.type = 'email';
+      contactField.placeholder = 'seu@email.com';
+      contactField.value = '';
+    } else {
+      contactLabel.textContent = 'WhatsApp';
+      contactField.type = 'tel';
+      contactField.placeholder = '(00) 00000-0000';
+      contactField.value = '';
+      contactField.addEventListener('input', phoneMaskHandler);
+    }
+  }
+
+  contactMethodSelect.addEventListener('change', updateContactField);
+  contactField.addEventListener('input', phoneMaskHandler);
+  document.getElementById('leadForm').addEventListener('submit', submitForm);
+
+  function submitForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    const nome = data.get('nome');
+    const preferredContact = data.get('preferredContact');
+    const contact = data.get('contact');
+    const negocio = data.get('negocio');
+    const descricao = data.get('descricao') || 'Não informado';
+
+    const msgBody = `Olá RetroDevs! Quero meu diagnóstico gratuito.\n\n` +
+      `Nome: ${nome}\n` +
+      `${preferredContact === 'email' ? 'E-mail' : 'WhatsApp'}: ${contact}\n` +
+      `Negócio: ${negocio}\n` +
+      `Descrição: ${descricao}`;
+
+    document.getElementById('formSuccess').classList.add('show');
+
+    setTimeout(() => {
+      if (preferredContact === 'email') {
+        const subject = encodeURIComponent('Pedido de diagnóstico gratuito');
+        const body = encodeURIComponent(msgBody);
+        window.open(`mailto:agenciaretrodevs@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      } else {
+        const msg = encodeURIComponent(msgBody);
+        window.open(`https://wa.me/5511966116366?text=${msg}`, '_blank');
+      }
+    }, 800);
+
+    return false;
+  }
 </script>
 </body>
 </html>
